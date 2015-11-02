@@ -19,7 +19,7 @@
         <a href="{{ path('chmodinator-check') }}" class="btn btn-primary" id="check-button" type="submit">
             <i class='fa fa-rotate-left'></i> Check files
         </a>
-        <a href="#" class="btn btn-tertiary" id="fix-button" type="submit">
+        <a href="{{ path('chmodinator-fix') }}" class="btn btn-tertiary" id="fix-button" type="submit">
             <i class='fa fa-rotate-right'></i> Fix files
         </a>
     </p>
@@ -45,10 +45,17 @@ i.red {
 
 </style>
 
+{% if msg is not empty %}
+    <p style='max-width: 42em;'>
+        {{ msg|raw }}
+    </p>
+{% endif %}
+
+{% if files is not empty %}
 <div class='files-listing'>
 {{ files|raw }}
 </div>
-
+{% endif %}
 
 
 
