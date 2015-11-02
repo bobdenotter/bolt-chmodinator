@@ -6,7 +6,7 @@ Bolt files not being removable using your FTP client or vice-versa, this
 extension will help you sort it out by applying 'chmod' to it. Clicking the
 'Fix' button will try to make all files in the data folders writable to 'all',
 and it will inform you of any files it couldn't modify, so you can change them
-using the command line or your (S)FTP client.<br><br>
+using the command line or your (S)FTP client.
 
 After installation, you can find the Chmodinator under 'Extras' > 'Chmodinator'.
 
