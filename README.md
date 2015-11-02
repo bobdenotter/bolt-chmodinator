@@ -10,6 +10,8 @@ using the command line or your (S)FTP client.<br><br>
 
 After installation, you can find the Chmodinator under 'Extras' > 'Chmodinator'.
 
+![extras](https://cloud.githubusercontent.com/assets/1833361/10888047/4cb04bce-818a-11e5-8398-970f327b9e25.png)
+
 You should be aware that using this tool is not considered 'good practice'. If
 possible, you should work with your system administrator to get things set up
 properly. If that's not an option, or if you're on shared hosting, this
