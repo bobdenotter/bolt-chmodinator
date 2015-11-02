@@ -1,5 +1,5 @@
-Bolt Extension Starter
-======================
+Bolt Chmodinator
+================
 
 Welcome to the <strong>Chmodinator</strong>! If you're having issues with your
 Bolt files not being removable using your FTP client or vice-versa, this
