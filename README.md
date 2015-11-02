@@ -12,3 +12,7 @@ You should be aware that using this tool is not considered 'good practice'. If
 possible, you should work with your system administrator to get things set up
 properly. If that's not an option, or if you're on shared hosting, this
 extension will help you out!
+
+Sample output / screenshot: 
+
+![chmodinator screenshot](https://cloud.githubusercontent.com/assets/1833361/10887032/34f597a0-8185-11e5-9cd8-409a2f5302d7.png)
