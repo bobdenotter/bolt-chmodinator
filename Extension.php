@@ -129,7 +129,7 @@ class Extension extends BaseExtension
 
         $msg = "Below you'll see the output of the changes. If there are lines
         left with a red '<i class='fa fa-close red'></i>', then these files /
-        folders could now be modified by Bolt or the Chmodinator. You should use
+        folders could not be modified by Bolt or the Chmodinator. You should use
         the command-line or your (S)FTP client to make sure these files are set
         correctly.";
 
