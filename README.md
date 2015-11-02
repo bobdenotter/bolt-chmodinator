@@ -8,11 +8,13 @@ extension will help you sort it out by applying 'chmod' to it. Clicking the
 and it will inform you of any files it couldn't modify, so you can change them
 using the command line or your (S)FTP client.<br><br>
 
+After installation, you can find the Chmodinator under 'Extras' > 'Chmodinator'.
+
 You should be aware that using this tool is not considered 'good practice'. If
 possible, you should work with your system administrator to get things set up
 properly. If that's not an option, or if you're on shared hosting, this
 extension will help you out!
 
-Sample output / screenshot: 
+Sample output / screenshot:
 
 ![chmodinator screenshot](https://cloud.githubusercontent.com/assets/1833361/10887032/34f597a0-8185-11e5-9cd8-409a2f5302d7.png)
