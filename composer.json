@@ -2,6 +2,7 @@
     "name": "bobdenotter/chmodinator",
     "description": "An extension to change file-rights on files, so both you and Bolt can modify them.",
     "type": "bolt-extension",
+    "keywords": ["chmod", "chmodinator", "rights", "filerights", "777", "rwx", "chown"],
     "require": {
         "bolt/bolt": ">=2.2.0,<3.0.0"
     },
