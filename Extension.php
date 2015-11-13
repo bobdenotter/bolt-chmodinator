@@ -13,7 +13,6 @@ class Extension extends BaseExtension
 
     public function initialize()
     {
-
         $root = $this->app['resources']->getUrl('bolt');
 
         // Admin menu
@@ -35,7 +34,6 @@ class Extension extends BaseExtension
             );
 
         // dump($this->locations);
-
     }
 
     public function getName()
@@ -45,7 +43,6 @@ class Extension extends BaseExtension
 
     public function index()
     {
-
         $msg = "Welcome to the <strong>Chmodinator</strong>! If you're having
         issues with your Bolt files not being removable using your FTP client or vice-
         versa, this extension will help you sort it out by applying 'chmod' to it.
@@ -61,7 +58,6 @@ class Extension extends BaseExtension
         $data = array('msg' => $msg);
 
         return $this->render('index.twig', $data);
-
     }
 
 
@@ -91,7 +87,6 @@ class Extension extends BaseExtension
         $data = array('files' => $files, 'msg' => $msg);
 
         return $this->render('index.twig', $data);
-
     }
 
     public function fix()
@@ -136,25 +131,20 @@ class Extension extends BaseExtension
         $data = array('files' => $files, 'msg' => $msg);
 
         return $this->render('index.twig', $data);
-
     }
 
 
 
     public function render($template, $data = array())
     {
+        $this->app['twig.loader.filesystem']->addPath(__DIR__);
 
-        $this->app['twig.loader.filesystem']->addPath(__DIR__ . '/templates');
-
-
-        return $this->app['render']->render($template, $data);
-
+        return $this->app['render']->render('chmod-templates/' . $template, $data);
     }
 
 
     public function getPrintInfoFile($file)
     {
-
         $path = str_replace($this->basepath, '…/', $file->getPathname());
         $dirname = dirname($path);
         $basename = basename($path);
@@ -200,9 +190,7 @@ class Extension extends BaseExtension
             $basename
         );
 
-
         return $res;
-
     }
 
     private function checkFilePerms($perms)
@@ -210,7 +198,6 @@ class Extension extends BaseExtension
         $ok = array('666', '667', '676', '677', '766', '767', '776', '777');
 
         return in_array($perms, $ok);
-
     }
 
 }
