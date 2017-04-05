@@ -1,10 +1,10 @@
 {
     "name": "bobdenotter/chmodinator",
-    "description": "An extension to change file-rights on files, so both you and Bolt can modify them.",
+    "description": "An extension to change file-rights (permissions) on files, so both you and Bolt can modify them.",
     "type": "bolt-extension",
-    "keywords": ["chmod", "chmodinator", "rights", "filerights", "777", "rwx", "chown"],
+    "keywords": ["chmod", "chmodinator", "rights", "filerights", "777", "rwx", "chown", "permissions"],
     "require": {
-        "bolt/bolt": ">=2.2.0,<3.0.0"
+        "bolt/bolt": "^3.2"
     },
     "license": "MIT",
     "authors": [
@@ -13,12 +13,15 @@
             "email": "bob@twokings.nl"
         }
     ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
-        "files": [
-            "init.php"
-        ],
         "psr-4": {
-            "Bolt\\Extension\\Bobdenotter\\Chmodinator\\": ""
+            "Bolt\\Extension\\Bobdenotter\\Chmodinator\\": "src"
         }
+    },
+    "extra": {
+        "bolt-assets": "web",
+        "bolt-class": "Bolt\\Extension\\Bobdenotter\\Chmodinator\\ChmodinatorExtension"
     }
 }
