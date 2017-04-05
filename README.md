@@ -1,14 +1,16 @@
 Bolt Chmodinator
 ================
 
-Welcome to the <strong>Chmodinator</strong>! If you're having issues with your
-Bolt files not being removable using your FTP client or vice-versa, this
-extension will help you sort it out by applying 'chmod' to it. Clicking the
-'Fix' button will try to make all files in the data folders writable to 'all',
-and it will inform you of any files it couldn't modify, so you can change them
-using the command line or your (S)FTP client.
+Welcome to the <strong>Chmodinator</strong>!
 
-After installation, you can find the Chmodinator under 'Extras' > 'Chmodinator'.
+If you're having issues with your Bolt files not being removable using your FTP
+client or vice-versa, this extension will help you sort it out by applying
+'chmod' to set the correct permissions to it. Clicking the 'Fix' button will try
+to make all files in the data folders writable to 'all', and it will inform you
+of any files it couldn't modify, so you can change them using the command line
+or your (S)FTP client.
+
+After installation, you can find the Chmodinator under 'Extensions' > 'Chmodinator'.
 
 ![extras](https://cloud.githubusercontent.com/assets/1833361/10888047/4cb04bce-818a-11e5-8398-970f327b9e25.png)
 
