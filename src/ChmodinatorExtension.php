@@ -6,9 +6,10 @@ use Bolt\Extension\SimpleExtension;
 use Bolt\Menu\MenuEntry;
 use Silex\Application;
 use Silex\ControllerCollection;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Finder\Finder;
 
 /**
  * Chmodinator extension class.
@@ -17,6 +18,8 @@ use Symfony\Component\Finder\Finder;
  */
 class ChmodinatorExtension extends SimpleExtension
 {
+    protected $key = false;
+
     /**
      * Add a backend menu entry under 'extensions'.
      *
@@ -36,10 +39,43 @@ class ChmodinatorExtension extends SimpleExtension
         ];
     }
 
+
+    protected function registerBackendRoutes(ControllerCollection $collection)
+    {
+        $collection->get('/extensions/chmodinator', [$this, 'index']);
+        $collection->get('/extensions/chmodinator/check', [$this, 'check']);
+        $collection->get('/extensions/chmodinator/fix', [$this, 'fixAll']);
+        $collection->get('/extensions/chmodinator/wipe', [$this, 'wipeCache']);
+
+        $collection->before([$this, 'before']);
+    }
+
+
     /**
-     * @param Request     $request
+     * @param Request $request
      * @param Application $app
+     * @return null|RedirectResponse
      */
+    public function before(Request $request, Application $app)
+    {
+        $config = $this->getConfig();
+        $allowed = $app['users']->isAllowed('dashboard') || ($config['key'] === $request->get('key'));
+
+        $app['debug'] = false;
+
+        if (!$allowed) {
+            /** @var UrlGeneratorInterface $generator */
+            $generator = $app['url_generator'];
+            return new RedirectResponse($generator->generate('dashboard'), Response::HTTP_SEE_OTHER);
+        }
+
+        if ($config['key'] === $request->get('key')) {
+            $this->key = true;
+        }
+
+        return null;
+    }
+
     public function getLocations()
     {
         $app = $this->getContainer();
@@ -54,13 +90,6 @@ class ChmodinatorExtension extends SimpleExtension
             );
 
         return $locations;
-    }
-
-    protected function registerBackendRoutes(ControllerCollection $collection)
-    {
-        $collection->get('/extensions/chmodinator', [$this, 'index']);
-        $collection->get('/extensions/chmodinator/check', [$this, 'check']);
-        $collection->get('/extensions/chmodinator/fix', [$this, 'fix']);
     }
 
     public function index()
@@ -90,13 +119,7 @@ class ChmodinatorExtension extends SimpleExtension
         $result = $app['cache']->flushAll();
 
         $files = '';
-        $finder = new Finder();
-        $finder->depth('<4');
-        $finder->exclude(['node_modules', 'bower_components', '.sass-cache']);
-
-        foreach($this->getLocations() as $loc) {
-            $finder->in($loc);
-        }
+        $finder = $this->getFinder(true);
 
         foreach ($finder as $file) {
             $res = $this->getPrintInfoFile($file);
@@ -113,21 +136,15 @@ class ChmodinatorExtension extends SimpleExtension
         return $this->renderTemplate('chmodinator.twig', $data);
     }
 
-    public function fix()
+    public function fixAll()
     {
         $app = $this->getContainer();
 
-        // Clear the cache beforehand, ar this will make sure we have a lot less files to deal with.
-        $result = $app['cache']->flushAll();
+        // Clear the cache beforehand, as this will make sure we have a lot less files to deal with.
+        $app['cache']->flushAll();
 
         $files = '';
-        $finder = new Finder();
-        $finder->depth('<4');
-        $finder->exclude(['node_modules', 'bower_components', '.sass-cache']);
-
-        foreach($this->getLocations() as $loc) {
-            $finder->in($loc);
-        }
+        $finder = $this->getFinder(true);
 
         foreach ($finder as $file) {
 
@@ -144,7 +161,6 @@ class ChmodinatorExtension extends SimpleExtension
                     $files .= $res;
                 }
             } else if (!$file->isDir() && !$this->checkFilePerms($perms)) {
-                echo "File = $perms<br>";
                 @chmod($file, 0666);
                 $res = $this->getPrintInfoFile($file);
                 $files .= $res;
@@ -153,16 +169,62 @@ class ChmodinatorExtension extends SimpleExtension
 
         }
 
-        $msg = "Below you'll see the output of the changes. If there are lines
-        left with a red '<i class='fa fa-close red'></i>', then these files /
-        folders could not be modified by Bolt or the Chmodinator. You should use
-        the command-line or your (S)FTP client to make sure these files are set
-        correctly.";
+        if ($this->key) {
+            $result = "1";
+        } else {
+            $msg = "Below you'll see the output of the changes. If there are lines
+                left with a red '<i class='fa fa-close red'></i>', then these files /
+                folders could not be modified by Bolt or the Chmodinator. You should use
+                the command-line or your (S)FTP client to make sure these files are set
+                correctly.";
+            $data = array('files' => $files, 'msg' => $msg);
+            $result = $this->renderTemplate('chmodinator.twig', $data);
+        }
 
-        $data = array('files' => $files, 'msg' => $msg);
-
-        return $this->renderTemplate('chmodinator.twig', $data);
+        return $result;
     }
+
+
+    /**
+     * @return string
+     */
+    public function wipeCache()
+    {
+        $app = $this->getContainer();
+
+        // Clear the cache beforehand, as this will make sure we have a lot less files to deal with.
+        $app['cache']->flushAll();
+
+        $files = '';
+        $finder = $this->getFinder(true);
+
+        foreach ($finder->files() as $file) {
+            @unlink($file);
+            $res = $this->getPrintInfoFile($file);
+            $files .= $res;
+        }
+
+        foreach ($finder->directories() as $folder) {
+            @unlink($folder);
+            $res = $this->getPrintInfoFile($folder);
+            $files .= $res;
+        }
+
+        if ($this->key) {
+            $result = "1";
+        } else {
+            $msg = "Below you'll see the output of the changes. If there are lines
+                left with a red '<i class='fa fa-close red'></i>', then these files /
+                folders could not be modified by Bolt or the Chmodinator. You should use
+                the command-line or your (S)FTP client to make sure these files are set
+                correctly.";
+            $data = array('files' => $files, 'msg' => $msg);
+            $result = $this->renderTemplate('chmodinator.twig', $data);
+        }
+
+        return $result;
+    }
+
 
     public function getPrintInfoFile($file)
     {
@@ -224,4 +286,36 @@ class ChmodinatorExtension extends SimpleExtension
         return in_array($perms, $ok);
     }
 
+    protected function getDefaultConfig()
+    {
+        return [
+            'key' => ''
+        ];
+    }
+
+
+    /**
+     * @param bool $cacheOnly
+     * @return Symfony\Component\Finder\Finder
+     */
+    private function getFinder($cacheOnly = false)
+    {
+        $app = $this->getContainer();
+
+        /** @var Symfony\Component\Finder\Finder $finder */
+        $finder = new Finder();
+        $finder->ignoreDotFiles(false);
+        $finder->depth('<6');
+        $finder->exclude(['node_modules', 'bower_components', '.sass-cache']);
+
+        if ($cacheOnly) {
+            $finder->in($app['resources']->getPath('cachepath'));
+        } else {
+            foreach($this->getLocations() as $loc) {
+                $finder->in($loc);
+            }
+        }
+
+        return $finder;
+    }
 }

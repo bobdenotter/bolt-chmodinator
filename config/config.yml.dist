@@ -1,0 +1,6 @@
+# Chmodinator settings
+
+# To be able to call the 'fix' and 'wipe' actions, without being logged on, you
+# need to set a secret key. Make it something complex, like from here:
+# https://www.random.org/strings/?num=5&len=20&digits=on&upperalpha=on&loweralpha=on&unique=on&format=html&rnd=new
+key: secretkeygoeshere

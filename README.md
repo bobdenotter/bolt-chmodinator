@@ -22,3 +22,40 @@ extension will help you out!
 Sample output / screenshot:
 
 ![chmodinator screenshot](https://cloud.githubusercontent.com/assets/1833361/10887032/34f597a0-8185-11e5-9cd8-409a2f5302d7.png)
+
+Running Chmodinator from the command line / cronjob
+---------------------------------------------------
+
+If you wish to incorporate running Chmodinator into your deploy-script or 
+regular maintenance, you can use something like this: 
+
+```
+wget http://example.org/bolt/extensions/chmodinator/fix?key=secretkey 
+```
+
+or 
+
+```
+wget http://example.org/bolt/extensions/chmodinator/wipe?key=secretkey 
+```
+
+In order for this to work, you'll need to set a proper key in the 
+`app/config/extensions/chmodinator.bobdenotter.yml` file. 
+
+You can also run it every night, with your cronjobs:
+
+```
+0 4 * * * wget http://example.org/bolt/extensions/chmodinator/fix?key=secretkey >/dev/null 2>&1
+```
+
+Chmodinator and the debug toolbar
+---------------------------------
+
+If you are running with `debug: true`, you'll get an alert on each "wipe" 
+action. This is because the profiler information gets wiped, before it can 
+be shown.
+ 
+The best way to prevent this is to turn off `debug` in production. Which you
+should be doing, regardless. ;-)
+
+
