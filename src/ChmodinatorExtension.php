@@ -4,6 +4,7 @@ namespace Bolt\Extension\Bobdenotter\Chmodinator;
 
 use Bolt\Extension\SimpleExtension;
 use Bolt\Menu\MenuEntry;
+use Bolt\Version;
 use Silex\Application;
 use Silex\ControllerCollection;
 use Symfony\Component\Finder\Finder;
@@ -42,10 +43,15 @@ class ChmodinatorExtension extends SimpleExtension
 
     protected function registerBackendRoutes(ControllerCollection $collection)
     {
-        $collection->get('/extensions/chmodinator', [$this, 'index']);
-        $collection->get('/extensions/chmodinator/check', [$this, 'check']);
-        $collection->get('/extensions/chmodinator/fix', [$this, 'fixAll']);
-        $collection->get('/extensions/chmodinator/wipe', [$this, 'wipeCache']);
+        $authBaseUrl = Version::compare('3.2.999', '<')
+            ? '/extensions/chmodinator'
+            : '/extend/chmodinator'
+        ;
+
+        $collection->get($authBaseUrl, [$this, 'index']);
+        $collection->get($authBaseUrl . '/check', [$this, 'check']);
+        $collection->get($authBaseUrl . '/fix', [$this, 'fixAll']);
+        $collection->get($authBaseUrl . '/wipe', [$this, 'wipeCache']);
 
         $collection->before([$this, 'before']);
     }
