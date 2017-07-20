@@ -43,15 +43,15 @@ class ChmodinatorExtension extends SimpleExtension
 
     protected function registerBackendRoutes(ControllerCollection $collection)
     {
-        $authBaseUrl = Version::compare('3.2.999', '<')
+        $baseUrl = Version::compare('3.2.999', '<')
             ? '/extensions/chmodinator'
             : '/extend/chmodinator'
         ;
 
-        $collection->get($authBaseUrl, [$this, 'index']);
-        $collection->get($authBaseUrl . '/check', [$this, 'check']);
-        $collection->get($authBaseUrl . '/fix', [$this, 'fixAll']);
-        $collection->get($authBaseUrl . '/wipe', [$this, 'wipeCache']);
+        $collection->get($baseUrl, [$this, 'index']);
+        $collection->get($baseUrl . '/check', [$this, 'check']);
+        $collection->get($baseUrl . '/fix', [$this, 'fixAll']);
+        $collection->get($baseUrl . '/wipe', [$this, 'wipeCache']);
 
         $collection->before([$this, 'before']);
     }
