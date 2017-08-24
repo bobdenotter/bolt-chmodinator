@@ -7,6 +7,7 @@ use Bolt\Menu\MenuEntry;
 use Bolt\Version;
 use Silex\Application;
 use Silex\ControllerCollection;
+use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -232,8 +233,12 @@ class ChmodinatorExtension extends SimpleExtension
         return $result;
     }
 
-
-    public function getPrintInfoFile($file)
+    /**
+     * @param SplFileInfo $file
+     *
+     * @return string
+     */
+    public function getPrintInfoFile(SplFileInfo $file)
     {
         $app = $this->getContainer();
 
