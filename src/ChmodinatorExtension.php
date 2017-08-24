@@ -242,9 +242,8 @@ class ChmodinatorExtension extends SimpleExtension
     {
         $app = $this->getContainer();
 
-        $this->basepath = $app['resources']->getPath('root');
-
-        $path = str_replace($this->basepath, '…', $file->getPathname());
+        $basepath = $app['resources']->getPath('root');
+        $path = str_replace($basepath, '…', $file->getPathname());
         $dirname = dirname($path);
         $basename = basename($path);
 
