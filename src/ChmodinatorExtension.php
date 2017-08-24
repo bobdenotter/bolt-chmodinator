@@ -11,6 +11,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Chmodinator extension class.
@@ -299,16 +300,15 @@ class ChmodinatorExtension extends SimpleExtension
         ];
     }
 
-
     /**
      * @param bool $cacheOnly
-     * @return Symfony\Component\Finder\Finder
+     *
+     * @return Finder
      */
     private function getFinder($cacheOnly = false)
     {
         $app = $this->getContainer();
 
-        /** @var Symfony\Component\Finder\Finder $finder */
         $finder = new Finder();
         $finder->ignoreDotFiles(false);
         $finder->depth('<6');
