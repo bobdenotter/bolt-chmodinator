@@ -50,10 +50,22 @@ class ChmodinatorExtension extends SimpleExtension
             : '/extend/chmodinator'
         ;
 
-        $collection->get($baseUrl, [$this, 'index']);
-        $collection->get($baseUrl . '/check', [$this, 'check']);
-        $collection->get($baseUrl . '/fix', [$this, 'fixAll']);
-        $collection->get($baseUrl . '/wipe', [$this, 'wipeCache']);
+        $collection
+            ->get($baseUrl, [$this, 'index'])
+            ->bind('chmodinator.index')
+        ;
+        $collection
+            ->get($baseUrl . '/check', [$this, 'check'])
+            ->bind('chmodinator.check')
+        ;
+        $collection
+            ->get($baseUrl . '/fix', [$this, 'fixAll'])
+            ->bind('chmodinator.fix')
+        ;
+        $collection
+            ->get($baseUrl . '/wipe', [$this, 'wipeCache'])
+            ->bind('chmodinator.wipe')
+        ;
 
         $collection->before([$this, 'before']);
     }
